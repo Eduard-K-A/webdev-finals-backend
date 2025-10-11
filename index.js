@@ -3,28 +3,38 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import userRoutes from "./routes/userRoutes.js";
+import User from "./models/User.js";
+
 
 dotenv.config(); // load .env first
 
-// ✅ create app FIRST before using it
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-// ✅ connect to MongoDB
+//  connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch(err => console.log("❌ MongoDB Error:", err));
+  .then(() => console.log(" MongoDB Connected"))
+  .catch(err => console.log(" MongoDB Error:", err));
 
-// ✅ use routes AFTER app is created
-app.use("/api/users", userRoutes);
+//  use routes AFTER app is created
+app.get("/api/users", userRoutes);
 
-// ✅ define simple test route
 app.get("/", (req, res) => {
-  res.send("Hello from Node.js + Express + MongoDB Atlas!");
+  res.send("API is running...");
 });
 
-// ✅ start server LAST
+//  define simple test route
+app.get('/test-db', async (req, res) => {
+  try {
+    const users = await User.find(); // simple query
+    res.json({ success: true, count: users.length });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+//  start server LAST
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
