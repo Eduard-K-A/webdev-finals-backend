@@ -11,9 +11,14 @@ router.get("/", async (req, res) => {
 
 // POST create new user
 router.post("/", async (req, res) => {
-  const newUser = new User(req.body);
-  await newUser.save();
-  res.json(newUser);
+  try{
+    const {name, email, password} = req.body;
+    const newUser = new User({name, email, password});
+    await newUser.save(); //saves to MONGODB
+    res.status(201).json({success: true, user: newUser});
+  }catch(err){
+    
+  }
 });
 
 export default router;
