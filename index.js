@@ -2,8 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-import authRegister from "./routes/auth/Register.js";
-import User from "./models/User.js";
+import authRegister from './routes/auth/Register.js';
+import User from './models/User.js';
 
 
 dotenv.config(); // load .env first
@@ -36,6 +36,4 @@ app.get('/test-db', async (req, res) => {
   }
 });
 
-//  start server LAST
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+export default app;
