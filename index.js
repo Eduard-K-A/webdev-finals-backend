@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-import userRoutes from "./routes/userRoutes.js";
+import authRegister from "./routes/auth/Register.js";
 import User from "./models/User.js";
 
 
@@ -19,7 +19,8 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch(err => console.log(" MongoDB Error:", err));
 
 //  use routes AFTER app is created
-app.get("/api/users", userRoutes);
+// mount auth routes (e.g. POST /auth/register)
+app.use("/auth", authRegister);
 
 app.get("/", (req, res) => {
   res.send("API is running...");

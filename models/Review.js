@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import Booking from "./Booking";
 
 const reviewSchema = new mongoose.Schema(
     {
