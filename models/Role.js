@@ -58,8 +58,6 @@ const roleSchema = new mongoose.Schema(
   }
 );
 
-// Create an index on role name for faster lookups
-roleSchema.index({ name: 1 });
 
 /**
  * Mongoose model for Role
