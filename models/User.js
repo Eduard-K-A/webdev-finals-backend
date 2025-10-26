@@ -7,10 +7,15 @@ const userSchema = new mongoose.Schema(
     lastName: { type: String, required: true },
     phone: { type: String },
     email: { type: String, required: true, unique: true },
-    password: { type: String, minLength: 6,required: true },
-
-    isAdmin: { type: Boolean, default: false },
-    createdAt: { type: Date, default: Date.now }
+    password: { type: String, minLength: 6, required: true },
+    roles: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Role",
+        required: true,
+      },
+    ],
+    createdAt: { type: Date, default: Date.now },
   },
   { timestamps: true }
 );
