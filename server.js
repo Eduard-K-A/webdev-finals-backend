@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-import authRegister from './routes/auth/Register.js';
+import authRegister from './routes/registerRoutes.js';
 import User from './models/User.js';
 
 
