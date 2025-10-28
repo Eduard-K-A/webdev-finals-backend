@@ -2,7 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-import authRegister from './routes/register.route.js';
+import registerRoute from './routes/register.route.js';
+import loginRoute from './routes/login.route.js';
 import User from './models/User.js';
 import { initializeRoles } from './models/Role.js';
 
@@ -19,15 +20,15 @@ app.use(cors());
 //  connect to MongoDB and initialize roles
 mongoose.connect(process.env.MONGODB_URI)
   .then(async () => {
-    console.log("📦 MongoDB Connected");
+    console.log("MongoDB Connected");
     // Initialize roles after connection
     await initializeRoles();
   })
-  .catch(err => console.log("❌ MongoDB Error:", err));
+  .catch(err => console.log("MongoDB Error:", err));
 
-//  use routes AFTER app is created
-// mount auth routes (e.g. POST /auth/register)
-app.use("/auth", authRegister);
+//  mount auth routes
+app.use("/auth", registerRoute);  // POST /auth/register
+app.use("/auth", loginRoute);     // POST /auth/login
 
 app.get("/", (req, res) => {
   res.send("API is running...");
