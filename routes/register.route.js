@@ -1,10 +1,7 @@
-/**
- * @fileoverview Authentication routes configuration
- */
 
 import express from 'express';
-import { register } from '../controllers/auth/index.controller.js';
-import { validateRegister } from '../middleware/auth.middleware.js';
+import { register } from '../controllers/auth/register.controller.js';
+import { validateRegister } from '../middleware/auth.validator.js';
 
 const router = express.Router();
 
@@ -13,8 +10,8 @@ const router = express.Router();
  * @desc    Register a new user
  * @access  Public
  * @body    {username, firstName, lastName, email, password}
- * @returns {message, user: {id, username, email}}
+ * @returns {message, user: {id, username, email, firstName, lastName, roles}}
  */
-router.post("/Register", validateRegister, register);
+router.post("/register", validateRegister, register);
 
 export default router;
