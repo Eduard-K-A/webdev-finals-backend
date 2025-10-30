@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-
+import cloudinary from './config/cloudinary.config.js';
 
 import registerRoute from './routes/register.route.js';
 import loginRoute from './routes/login.route.js';
@@ -54,7 +54,16 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
+const image = 'room.jpg';
 
+ ( async() => {
+    try {
+     const result = await cloudinary.uploader.upload(image, { folder: 'rooms' });
+     console.log('Upload Result:', result);
+    } catch (error) {
+     console.error('Upload Error:', error);
+    }
+})();
 
 export default app;
 
