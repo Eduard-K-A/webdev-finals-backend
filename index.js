@@ -2,13 +2,18 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+//import {v2 as cloudinary} from 'cloudinary';
+
 import registerRoute from './routes/register.route.js';
 import loginRoute from './routes/login.route.js';
+import uploadRoute from './routes/uploadRoom.route.js';
 import User from './models/User.js';
 import { initializeRoles } from './models/Role.js';
 
 
 dotenv.config(); // load .env first
+
+
 
 const app = express();
 
@@ -29,6 +34,7 @@ mongoose.connect(process.env.MONGODB_URI)
 //  mount auth routes
 app.use("/auth", registerRoute);  // POST /auth/register
 app.use("/auth", loginRoute);     // POST /auth/login
+app.use("/api", uploadRoute);     // POST /api/upload
 
 app.get("/", (req, res) => {
   res.send("API is running...");
