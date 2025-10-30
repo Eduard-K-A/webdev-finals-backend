@@ -2,10 +2,10 @@
  * @fileoverview Authentication controller handling user registration
  */
 
-import authConfig from '../../config/auth.config.js';
-import UserService from '../../services/user.service.js';
-import RoleService from '../../services/role.service.js';
-import AuthUtils from '../../utils/auth.utils.js';
+import authConfig from '../config/auth.config.js';
+import UserService from '../services/user.service.js';
+import RoleService from '../services/role.service.js';
+import AuthUtils from '../utils/auth.utils.js';
 
 /**
  * Handle user registration
