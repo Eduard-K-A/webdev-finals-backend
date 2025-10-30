@@ -7,6 +7,7 @@ import cloudinary from './config/cloudinary.config.js';
 import registerRoute from './routes/register.route.js';
 import loginRoute from './routes/login.route.js';
 import uploadRoute from './routes/uploadRoom.route.js';
+import roomRoute from './routes/room.route.js';
 import User from './models/User.js';
 import { initializeRoles } from './models/Role.js';
 
@@ -33,6 +34,7 @@ mongoose.connect(process.env.MONGODB_URI)
 app.use("/auth", registerRoute);  // POST /auth/register
 app.use("/auth", loginRoute);     // POST /auth/login
 app.use("/api", uploadRoute);     // POST /api/upload
+app.use("/api", roomRoute);       // /api/rooms
 
 app.get("/", (req, res) => {
   res.send("API is running...");
@@ -53,18 +55,5 @@ app.get('/test-db', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
-
-const image = 'room.jpg';
-
- ( async() => {
-    try {
-     const result = await cloudinary.uploader.upload(image, { folder: 'rooms' });
-     console.log('Upload Result:', result);
-    } catch (error) {
-     console.error('Upload Error:', error);
-    }
-})();
-
-export default app;
 
 
