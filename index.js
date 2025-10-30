@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-//import {v2 as cloudinary} from 'cloudinary';
+
 
 import registerRoute from './routes/register.route.js';
 import loginRoute from './routes/login.route.js';
@@ -12,8 +12,6 @@ import { initializeRoles } from './models/Role.js';
 
 
 dotenv.config(); // load .env first
-
-
 
 const app = express();
 
@@ -50,8 +48,14 @@ app.get('/test-db', async (req, res) => {
   }
 });
 
-export default app;
+
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+
+
+export default app;
+
+

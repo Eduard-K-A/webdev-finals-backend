@@ -3,8 +3,8 @@
  * Deletes images from Cloudinary
  */
 
-// Import the configured Cloudinary v2 SDK
-import { v2 as cloudinary } from 'cloudinary';
+// Import the configured Cloudinary SDK
+import {cloudinary } from 'cloudinary';
 // This import runs the configuration file (assumes config/cloudinary.js)
 import '../config/cloudinary.js'; 
 
