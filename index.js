@@ -19,7 +19,11 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(express.json());
-app.use(cors());
+
+app.use(cors({ //only accepts requests from this origin
+  origin: ['http://localhost:5173', 'https://webdev-finals-frontend.vercel.app/'],
+  credentials: true
+}));
 
 //  connect to MongoDB and initialize roles
 mongoose.connect(process.env.MONGODB_URI)
