@@ -9,7 +9,7 @@ const roomSchema = new mongoose.Schema(
     pricePerNight: { type: Number, required: true, min: 0 },
     maxPeople: { type: Number, required: true, min: 1 },
     // amenities reference (optional) — store ObjectId references to Amenity documents
-    amenities: [{ type: mongoose.Schema.Types.ObjectId, ref: "Amenity" }],
+    amenities: [{ type: String}],
     // photos stored as objects with url and publicId returned from Cloudinary
     photos: [
       {
