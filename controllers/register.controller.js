@@ -13,7 +13,7 @@ import AuthUtils from '../utils/auth.utils.js';
  * @param {Response} res - Express response object
  */
 export const register = async (req, res) => {
-    const { username, firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
     try {
         // Check if user exists
@@ -38,7 +38,6 @@ export const register = async (req, res) => {
         // Create user
         const newUser = await UserService.createUser(
             {
-                username,
                 firstName,
                 lastName,
                 email,
