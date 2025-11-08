@@ -2,11 +2,11 @@ import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
 
 export const register = async (req, res) => {
-    const { username, firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
     try {
         // Validate required fields
-        if (!username || !firstName || !lastName || !email || !password) {
+        if ( !firstName || !lastName || !email || !password) {
             return res.status(400).json({ message: "Missing required fields" });
         }
 
@@ -22,7 +22,6 @@ export const register = async (req, res) => {
 
         // Create new user
         const newUser = new User({
-            username,
             firstName,
             lastName,
             email,
@@ -37,7 +36,6 @@ export const register = async (req, res) => {
             message: "User created successfully",
             user: {
                 id: newUser._id,
-                username: newUser.username,
                 email: newUser.email
             }
         });
