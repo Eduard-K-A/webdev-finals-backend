@@ -2,7 +2,6 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-import cloudinary from './config/cloudinary.config.js';
 
 import registerRoute from './routes/register.route.js';
 import loginRoute from './routes/login.route.js';
@@ -21,7 +20,7 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 
 app.use(cors({ //only accepts requests from this origin
-  origin: ['http://localhost:5173', 'https://webdev-finals-frontend.vercel.app'],
+  origin: ['http://localhost:5173', 'https://webdev-finals-frontend.vercel.app', 'https://final-project-10-webdevt.vercel.app/'],
   credentials: true
 }));
 
