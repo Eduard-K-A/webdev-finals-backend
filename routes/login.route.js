@@ -8,8 +8,8 @@ const router = express.Router();
  * @route   POST /auth/login
  * @desc    Login an existing user
  * @access  Public
- * @body    {username, password}
- * @returns {message, user: {id, username, email, firstName, lastName, roles}}
+ * @body    { password}
+ * @returns {message, user: {id, email, firstName, lastName, roles}}
  */
 router.post("/login", validateLogin, login);
 
