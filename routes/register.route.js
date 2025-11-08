@@ -9,8 +9,8 @@ const router = express.Router();
  * @route   POST /auth/register
  * @desc    Register a new user
  * @access  Public
- * @body    {username, firstName, lastName, email, password}
- * @returns {message, user: {id, username, email, firstName, lastName, roles}}
+ * @body    { firstName, lastName, email, password}
+ * @returns {message, user: {id, email, firstName, lastName, roles}}
  */
 router.post("/register", validateRegister, register);
 
