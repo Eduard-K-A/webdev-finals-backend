@@ -12,10 +12,10 @@ import AuthUtils from '../utils/auth.utils.js';
  * @param {Function} next - Express next function
  */
 export const validateRegister = (req, res, next) => {
-    const { username, firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
     // Check required fields
-    if (!username || !firstName || !lastName || !email || !password) {
+    if ( !firstName || !lastName || !email || !password) {
         return res.status(400).json({ 
             message: authConfig.ERRORS.MISSING_FIELDS 
         });
