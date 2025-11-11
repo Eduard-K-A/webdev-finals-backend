@@ -37,10 +37,13 @@ export const login = async (req, res) => {
     res.status(200).json({
       message: "Login successful",
       user: {
+        _id: user._id,
         id: user._id,
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
+        phone: user.phone,
+        role: user.roles && user.roles.length > 0 ? user.roles[0].name : 'user',
         roles: user.roles.map((role) => role.name),
       },
     });
