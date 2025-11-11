@@ -34,9 +34,29 @@ class AuthUtils {
      * @returns {Object} Formatted user data
      */
     static formatUserResponse(user) {
+        // Handle populated roles or just role names
+        let roleName = 'user';
+        if (user.roles) {
+            if (Array.isArray(user.roles)) {
+                if (user.roles.length > 0) {
+                    roleName = user.roles[0].name || user.roles[0];
+                }
+            } else if (typeof user.roles === 'string') {
+                roleName = user.roles;
+            }
+        }
+
         return {
+            _id: user._id,
             id: user._id,
-            email: user.email
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            phone: user.phone,
+            role: roleName,
+            roles: Array.isArray(user.roles) 
+                ? user.roles.map(r => typeof r === 'string' ? r : r.name)
+                : [roleName]
         };
     }
 }
