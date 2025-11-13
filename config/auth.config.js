@@ -10,6 +10,7 @@ export default {
     // Registration settings
     ALLOWED_ROLES: ['user', 'admin', 'public'],
     DEFAULT_ROLE: 'user',
+    ADMIN_ROLE: 'admin',
 
     // Error messages
     ERRORS: {
