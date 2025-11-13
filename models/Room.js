@@ -5,8 +5,9 @@ const roomSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
-    type: { type: String, enum: ["Single", "Double", "Suite"], required: true },
+    type: { type: String, enum: ["Single", "Double", "Suite", "Family", "Exclusive"], required: true },
     pricePerNight: { type: Number, required: true, min: 0 },
+    rating:{type: Number, default:0},
     maxPeople: { type: Number, required: true, min: 1 },
     // amenities reference (optional) — store ObjectId references to Amenity documents
     amenities: [{ type: String}],
