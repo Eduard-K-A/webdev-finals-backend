@@ -7,13 +7,15 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 import User from '../models/User.js'; 
+import Role from '../models/Role.js';
+import authConfig from '../config/auth.config.js';
 
 // --- Configuration ---
 // Load environment variables
 dotenv.config();
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD 
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || '';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 // ---------------------
 
 const seedAdmin = async () => {
@@ -27,6 +29,11 @@ const seedAdmin = async () => {
     isConnected = true;
     console.log('MongoDB Connected...');
 
+    // Validate env vars
+    if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+      throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD must be set in environment');
+    }
+
     // Check if admin already exists
     const adminExists = await User.findOne({ email: ADMIN_EMAIL });
 
@@ -39,17 +46,28 @@ const seedAdmin = async () => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(ADMIN_PASSWORD, salt);
 
-    //Create the new admin user
+    //Fetch admin role ID from schema
+    const adminRole = await Role.findOne({ name: authConfig.ADMIN_ROLE || 'admin' });
+    console.log('adminRole:', adminRole);
+    if(!adminRole){
+      throw new Error(authConfig.ERRORS.ROLE_NOT_FOUND);
+    }
+
+    const adminRoleID = adminRole._id;
+
+    //Create the new admin user (note: User schema expects `roles` array)
     const adminUser = new User({
       email: ADMIN_EMAIL,
       password: hashedPassword,
       firstName: 'Admin',
       lastName: 'User',
-      role: 'admin', 
+      roles: [adminRoleID],
     });
 
     await adminUser.save();
     console.log(' Admin user created successfully!');
+    
+console.log('admin user:', adminUser);
 
   } catch (error) {
     console.error('Error seeding admin user:', error.message);
