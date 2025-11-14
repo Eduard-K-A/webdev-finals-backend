@@ -7,6 +7,7 @@ import registerRoute from './routes/register.route.js';
 import loginRoute from './routes/login.route.js';
 import uploadRoute from './routes/uploadRoom.route.js';
 import roomRoute from './routes/room.route.js';
+import userRoute from './routes/user.route.js';
 import User from './models/User.js';
 import { initializeRoles } from './models/Role.js';
 
@@ -38,6 +39,7 @@ app.use("/auth", registerRoute);  // POST /auth/register
 app.use("/auth", loginRoute);     // POST /auth/login
 app.use("/api", uploadRoute);     // POST /api/upload
 app.use("/api", roomRoute);       // /api/rooms
+app.use("/api", userRoute);       // /api/users
 
 app.get("/", (req, res) => {
   res.send("API is running...");
