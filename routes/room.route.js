@@ -2,7 +2,9 @@
  * Room API routes
  */
 import express from 'express';
-import { createRoom, getRooms, getRoomById, updateRoom } from '../controllers/room.controller.js';
+import { createRoom, getRooms, getRoomById, updateRoom, deleteImage } from '../controllers/room.controller.js';
+import { handleUpload } from '../controllers/uploadRoom.controller.js';
+import upload from '../middleware/upload.validator.js';
 
 const router = express.Router();
 
@@ -17,5 +19,14 @@ router.get('/rooms/:id', getRoomById);
 
 // PUT /api/rooms/:id - update room by ID (uuid or _id)
 router.put('/rooms/:id', updateRoom);
+
+// DELETE /api/upload/:publicId - delete image by public ID
+router.delete('/upload/:publicId',deleteImage);
+
+// POST /api/upload - upload images
+router.post('/upload', 
+    upload.array('images', 10), // Handle up to 10 images
+    handleUpload
+);
 
 export default router;
