@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const bookingSchema = new mongoose.Schema(
     {
-        user: { type: ObjectId, required: true, ref: "User" },
-        room: { type: ObjectId, required: true, ref: "Room" },
+        user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
+        room: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Room" },
         checkInDate: { type: Date, required: true, min: Date.now },
         checkOutDate: { type: Date, required: true, validate: (checkOutDate, checkInDate) => checkOutDate > checkInDate },
         totalGuests: { type: Number, required: true },
