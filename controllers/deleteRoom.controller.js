@@ -4,9 +4,8 @@
  */
 
 // Import the configured Cloudinary SDK
-import {cloudinary } from 'cloudinary';
-// This import runs the configuration file (assumes config/cloudinary.js)
-import '../config/cloudinary.js'; 
+// Import the configured Cloudinary instance from our config
+import cloudinary from '../config/cloudinary.config.js';
 
 /**
  * Delete image from Cloudinary
