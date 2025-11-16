@@ -12,6 +12,9 @@ router.post('/rooms', createRoom);
 // GET /api/rooms - list rooms
 router.get('/rooms', getRooms);
 
+// GET /api/rooms/:id - get room by ID
+router.get('/rooms/:id', getRooms);
+
 //PUT /api/rooms/:id - update room
 router.put('/rooms/:id', createRoom);
 
