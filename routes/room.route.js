@@ -2,7 +2,8 @@
  * Room API routes
  */
 import express from 'express';
-import { createRoom, getRooms, getRoomById, updateRoom, deleteImage } from '../controllers/room.controller.js';
+import { createRoom, getRooms, getRoomById, updateRoom } from '../controllers/room.controller.js';
+import { deleteImage } from '../controllers/deleteRoom.controller.js';
 import { handleUpload } from '../controllers/uploadRoom.controller.js';
 import upload from '../middleware/upload.validator.js';
 
