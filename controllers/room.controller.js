@@ -58,13 +58,13 @@ export const getRooms = async (req, res) => {
 };
 
 /**
- * Get a single room by id (UUID or MongoDB _id)
+ * Get a single room by id (UUID or MongoDB id)
  */
 export const getRoomById = async (req, res) => {
   try {
     const { id } = req.params;
     
-    // Try to find by custom id field first (UUID), then fall back to _id
+    // Try to find by custom id field first (UUID), then fall back to id
     let room = await Room.findOne({ id });
     if (!room) {
       room = await Room.findById(id);
@@ -82,7 +82,7 @@ export const getRoomById = async (req, res) => {
 };
 
 /**
- * Update a room by id (UUID or MongoDB _id)
+ * Update a room by id (UUID or MongoDB id)
  */
 export const updateRoom = async (req, res) => {
   try {
@@ -104,7 +104,7 @@ export const updateRoom = async (req, res) => {
     if (photos) updateData.photos = photos;
     if (isAvailable !== undefined) updateData.isAvailable = isAvailable;
 
-    // Try to update by custom id field first (UUID), then fall back to _id
+    // Try to update by custom id field first (UUID), then fall back to id
     let room = await Room.findOneAndUpdate({ id }, updateData, { new: true });
     if (!room) {
       room = await Room.findByIdAndUpdate(id, updateData, { new: true });
