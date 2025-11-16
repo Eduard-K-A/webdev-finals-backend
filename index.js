@@ -7,6 +7,7 @@ import registerRoute from './routes/register.route.js';
 import loginRoute from './routes/login.route.js';
 import roomRoute from './routes/room.route.js';
 import userRoute from './routes/user.route.js';
+import bookingRoute from './routes/booking.route.js';
 import User from './models/User.js';
 import { initializeRoles } from './models/Role.js';
 
@@ -36,10 +37,7 @@ mongoose.connect(process.env.MONGODB_URI)
 //  mount auth routes
 app.use("/auth", registerRoute);  // POST /auth/register
 app.use("/auth", loginRoute);     // POST /auth/login
-app.use("/api", uploadRoute);     // POST /api/upload
 app.use("/api", roomRoute);       // /api/rooms
-
-import bookingRoute from './routes/booking.route.js';
 app.use("/api", userRoute);       // /api/users
 app.use("/api", bookingRoute);    // /api/bookings
 
