@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 // Room schema for storing room data
 const roomSchema = new mongoose.Schema(
   {
+    id: { type: String, unique: true, sparse: true },
     title: { type: String, required: true },
     description: { type: String, required: true },
     type: { type: String, enum: ["Single", "Double", "Suite", "Family", "Exclusive"], required: true },
