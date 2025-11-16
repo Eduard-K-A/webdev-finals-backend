@@ -39,7 +39,10 @@ app.use("/auth", registerRoute);  // POST /auth/register
 app.use("/auth", loginRoute);     // POST /auth/login
 app.use("/api", uploadRoute);     // POST /api/upload
 app.use("/api", roomRoute);       // /api/rooms
+
+import bookingRoute from './routes/booking.route.js';
 app.use("/api", userRoute);       // /api/users
+app.use("/api", bookingRoute);    // /api/bookings
 
 app.get("/", (req, res) => {
   res.send("API is running...");
