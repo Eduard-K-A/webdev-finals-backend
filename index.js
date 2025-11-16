@@ -5,7 +5,6 @@ import cors from "cors";
 
 import registerRoute from './routes/register.route.js';
 import loginRoute from './routes/login.route.js';
-import uploadRoute from './routes/uploadRoom.route.js';
 import roomRoute from './routes/room.route.js';
 import userRoute from './routes/user.route.js';
 import User from './models/User.js';
