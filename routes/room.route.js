@@ -21,8 +21,8 @@ router.get('/rooms/:id', getRoomById);
 // PUT /api/rooms/:id - update room by ID (uuid or _id)
 router.put('/rooms/:id', updateRoom);
 
-// DELETE /api/upload/:publicId - delete image by public ID
-router.delete('/rooms/:id',deleteImage);
+// DELETE /api/upload/:publicId - delete image by public ID 
+router.delete('/upload/:publicId',deleteImage);
 
 // POST /api/upload - upload images
 router.post('/upload', 
