@@ -25,14 +25,44 @@ app.use(cors({ //only accepts requests from this origin
   credentials: true
 }));
 
-//  connect to MongoDB and initialize roles
-mongoose.connect(process.env.MONGODB_URI)
-  .then(async () => {
-    console.log("MongoDB Connected");
+// Connect to MongoDB and initialize roles before starting server
+const startServer = async () => {
+  const mongoUri = process.env.MONGODB_URI;
+  if (!mongoUri) {
+    console.error('MONGODB_URI is not defined in environment. Please set it and restart.');
+    process.exit(1);
+  }
+
+  try {
+    // Recommended options
+    await mongoose.connect(mongoUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
+    console.log('MongoDB Connected');
     // Initialize roles after connection
     await initializeRoles();
-  })
-  .catch(err => console.log("MongoDB Error:", err));
+
+    mongoose.connection.on('error', (err) => {
+      console.error('Mongoose connection error:', err);
+    });
+
+    mongoose.connection.on('disconnected', () => {
+      console.warn('Mongoose disconnected');
+    });
+
+    // Start Express server after successful DB connection
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+  } catch (err) {
+    console.error('Failed to connect to MongoDB:', err);
+    process.exit(1);
+  }
+};
+
+startServer();
 
 //  mount auth routes
 app.use("/auth", registerRoute);  // POST /auth/register
@@ -57,8 +87,6 @@ app.get('/test-db', async (req, res) => {
 
 
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+// (server is started after successful DB connection)
 
 
