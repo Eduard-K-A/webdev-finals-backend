@@ -22,7 +22,7 @@ router.get('/rooms/:id', getRoomById);
 router.put('/rooms/:id', updateRoom);
 
 // DELETE /api/upload/:publicId - delete image by public ID
-router.delete('/upload/:publicId',deleteImage);
+router.delete('/rooms/:id',deleteImage);
 
 // POST /api/upload - upload images
 router.post('/upload', 
