@@ -39,9 +39,14 @@ export const createBooking = async (req, res) => {
 // Get all bookings for a user
 export const getUserBookings = async (req, res) => {
   try {
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+    
     const bookings = await Booking.find({ user: req.user._id }).populate('room');
-    res.json(bookings);
+    res.status(200).json(bookings);
   } catch (err) {
+    console.error('[Booking] Error fetching user bookings:', err.message);
     res.status(500).json({ error: err.message });
   }
 };
