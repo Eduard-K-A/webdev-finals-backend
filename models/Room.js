@@ -20,6 +20,12 @@ const roomSchema = new mongoose.Schema(
         originalName: { type: String }
       }
     ],
+    // single thumbnail picture for the room (optional)
+    thumbnailPic: {
+      url: { type: String },
+      publicId: { type: String },
+      originalName: { type: String }
+    },
     isAvailable: { type: Boolean, default: true },
     averageRating: { type: Number, min: 0, max: 5, default: 0 },
     createdAt: { type: Date, default: Date.now }
