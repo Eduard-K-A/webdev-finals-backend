@@ -10,7 +10,7 @@ import Room from '../models/Room.js';
  */
 export const createRoom = async (req, res) => {
   try {
-    const { title, description, type, pricePerNight, maxPeople, amenities, photos, isAvailable } = req.body;
+    const { title, description, type, pricePerNight, maxPeople, amenities, photos, thumbnailPic, isAvailable } = req.body;
 
     // Basic validation
     if (!title || !description || !type || !pricePerNight || !maxPeople) {
@@ -27,6 +27,7 @@ export const createRoom = async (req, res) => {
       maxPeople,
       amenities: amenities || [],
       photos: photos || [],
+      thumbnailPic: thumbnailPic || undefined,
       isAvailable: typeof isAvailable === 'boolean' ? isAvailable : true
     });
 
@@ -102,6 +103,7 @@ export const updateRoom = async (req, res) => {
     if (maxPeople) updateData.maxPeople = maxPeople;
     if (amenities) updateData.amenities = amenities;
     if (photos) updateData.photos = photos;
+    if (thumbnailPic) updateData.thumbnailPic = thumbnailPic;
     if (isAvailable !== undefined) updateData.isAvailable = isAvailable;
 
     // Try to update by custom id field first (UUID), then fall back to id
