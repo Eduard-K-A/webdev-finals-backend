@@ -34,8 +34,9 @@ export const login = async (req, res) => {
       });
     }
 
-    // Create JWT token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' });
+    // Create JWT token (must use same secret as auth middleware)
+    const jwtSecret = process.env.JWT_SECRET || 'default-jwt-secret-key';
+    const token = jwt.sign({ id: user._id }, jwtSecret, { expiresIn: '7d' });
 
     // Return success with user data (excluding password) and token
     res.status(200).json({
