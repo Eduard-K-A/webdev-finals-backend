@@ -11,7 +11,7 @@ export const authenticate = async (req, res, next) => {
       return res.status(401).json({ error: 'No token provided' });
     }
     
-    const secret = process.env.JWT_SECRET || 'fallback-secret-key';
+    const secret = process.env.JWT_SECRET || 'default-jwt-secret-key';
     const decoded = jwt.verify(token, secret);
     const user = await User.findById(decoded.id);
     if (!user) {
