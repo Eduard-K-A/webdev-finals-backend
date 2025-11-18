@@ -6,13 +6,23 @@ export const authenticate = async (req, res, next) => {
   try {
     let token = req.cookies?.token || req.headers['authorization'];
     if (token && token.startsWith('Bearer ')) token = token.slice(7);
-    if (!token) return res.status(401).json({ error: 'No token provided' });
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (!token) {
+      console.warn('[Auth] No token provided in request');
+      return res.status(401).json({ error: 'No token provided' });
+    }
+    
+    const secret = process.env.JWT_SECRET || 'fallback-secret-key';
+    const decoded = jwt.verify(token, secret);
     const user = await User.findById(decoded.id);
-    if (!user) return res.status(401).json({ error: 'User not found' });
+    if (!user) {
+      console.warn(`[Auth] User not found for id: ${decoded.id}`);
+      return res.status(401).json({ error: 'User not found' });
+    }
+    
     req.user = user;
     next();
   } catch (err) {
-    res.status(401).json({ error: 'Invalid token' });
+    console.error('[Auth] Token verification failed:', err.message);
+    res.status(401).json({ error: 'Invalid token', details: err.message });
   }
 };
