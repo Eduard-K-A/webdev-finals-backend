@@ -15,13 +15,14 @@ router.post('/bookings/room/:roomId', authenticate, validateBooking, (req, res, 
 	next();
 }, createBooking);
 
-// User gets their bookings
-router.get('/bookings', authenticate, getUserBookings);
+// /api/bookings
+router.get('/bookings', authenticate, getUserBookings); // User gets their bookings
 
-// Admin gets all bookings
+// /api/bookings/all
 router.get('/bookings/all', authenticate, getAllBookings); // Add admin check if needed
 
+// /api/bookings/:id/cancel
+router.patch('/bookings/:id/cancel', authenticate, cancelBooking); 
 // User cancels their booking
-router.patch('/bookings/:id/cancel', authenticate, cancelBooking);
 
 export default router;
