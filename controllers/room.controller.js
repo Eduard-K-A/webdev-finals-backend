@@ -23,7 +23,7 @@ async function ensureRoomHasId(room) {
  */
 export const createRoom = async (req, res) => {
   try {
-    const { title, description, type, pricePerNight, maxPeople, amenities, photos, thumbnailPic, isAvailable } = req.body;
+    const { title, description, type, pricePerNight, maxPeople, amenities, photos, thumbnailPic, isAvailable, rating } = req.body;
 
     // Basic validation
     if (!title || !description || !type || !pricePerNight || !maxPeople) {
@@ -41,7 +41,8 @@ export const createRoom = async (req, res) => {
       amenities: amenities || [],
       photos: photos || [],
       thumbnailPic: thumbnailPic || undefined,
-      isAvailable: typeof isAvailable === 'boolean' ? isAvailable : true
+      isAvailable: typeof isAvailable === 'boolean' ? isAvailable : true,
+      rating: typeof rating === 'number' ? rating : 0
     });
 
     await newRoom.save();
@@ -68,6 +69,8 @@ export const getRooms = async (req, res) => {
     // Ensure all rooms have an id field
     rooms = await Promise.all(rooms.map(room => ensureRoomHasId(room)));
     
+    // Ensure rating is always present in response
+    rooms = rooms.map(room => ({ ...room.toObject(), rating: typeof room.rating === 'number' ? room.rating : 0 }));
     return res.status(200).json({ rooms });
   } catch (err) {
     console.error('getRooms error:', err);
@@ -102,7 +105,9 @@ export const getRoomById = async (req, res) => {
     // Ensure the room has an id field
     room = await ensureRoomHasId(room);
 
-    return res.status(200).json({ room });
+    // Ensure rating is always present in response
+    const roomObj = { ...room.toObject(), rating: typeof room.rating === 'number' ? room.rating : 0 };
+    return res.status(200).json({ room: roomObj });
   } catch (err) {
     console.error('getRoomById error:', err);
     return res.status(500).json({ message: err.message || 'Server error' });
@@ -115,10 +120,10 @@ export const getRoomById = async (req, res) => {
 export const updateRoom = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, type, pricePerNight, maxPeople, amenities, photos, thumbnailPic, isAvailable } = req.body;
+    const { title, description, type, pricePerNight, maxPeople, amenities, photos, thumbnailPic, isAvailable, rating } = req.body;
 
     // Validate at least one field is provided
-    if (!title && !description && !type && !pricePerNight && !maxPeople && !amenities && !photos && !thumbnailPic && isAvailable === undefined) {
+    if (!title && !description && !type && !pricePerNight && !maxPeople && !amenities && !photos && !thumbnailPic && isAvailable === undefined && rating === undefined) {
       return res.status(400).json({ message: 'No fields to update' });
     }
 
@@ -132,6 +137,7 @@ export const updateRoom = async (req, res) => {
     if (photos) updateData.photos = photos;
     if (thumbnailPic) updateData.thumbnailPic = thumbnailPic;
     if (isAvailable !== undefined) updateData.isAvailable = isAvailable;
+    if (rating !== undefined) updateData.rating = rating;
 
     // Update by MongoDB ObjectId
     const room = await Room.findByIdAndUpdate(id, updateData, { new: true });
