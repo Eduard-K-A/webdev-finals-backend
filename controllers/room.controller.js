@@ -2,6 +2,19 @@
  * @fileoverview Controller for Room-related operations
  */
 import Room from '../models/Room.js';
+import { v4 as uuidv4 } from 'uuid';
+
+/**
+ * Helper function to ensure a room has an id field
+ * If the room doesn't have an id, generate one and save it
+ */
+async function ensureRoomHasId(room) {
+  if (!room.id) {
+    room.id = uuidv4();
+    await room.save();
+  }
+  return room;
+}
 
 /**
  * Create a new room record
@@ -50,7 +63,11 @@ export const getRooms = async (req, res) => {
     if (available === 'true') filter.isAvailable = true;
     if (available === 'false') filter.isAvailable = false;
 
-    const rooms = await Room.find(filter).sort({ createdAt: -1 });
+    let rooms = await Room.find(filter).sort({ createdAt: -1 });
+    
+    // Ensure all rooms have an id field
+    rooms = await Promise.all(rooms.map(room => ensureRoomHasId(room)));
+    
     return res.status(200).json({ rooms });
   } catch (err) {
     console.error('getRooms error:', err);
@@ -81,6 +98,9 @@ export const getRoomById = async (req, res) => {
     if (!room) {
       return res.status(404).json({ message: 'Room not found' });
     }
+
+    // Ensure the room has an id field
+    room = await ensureRoomHasId(room);
 
     return res.status(200).json({ room });
   } catch (err) {
