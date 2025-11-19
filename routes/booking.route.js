@@ -1,5 +1,5 @@
 import express from 'express';
-import { createBooking, getUserBookings, getAllBookings, cancelBooking } from '../controllers/booking.controller.js';
+import { createBooking, getUserBookings, getAllBookings, cancelBooking, updateBooking } from '../controllers/booking.controller.js';
 import { authenticate } from '../middleware/auth.js';
 import { validateBooking } from '../middleware/booking.validator.js';
 
@@ -24,5 +24,9 @@ router.get('/bookings/all', getAllBookings);
 // /api/bookings/:id/cancel
 router.patch('/bookings/:id/cancel', authenticate, cancelBooking); 
 // User cancels their booking
+
+// /api/bookings/:id
+router.patch('/bookings/:id', authenticate, updateBooking);// Update a booking by ID
+
 
 export default router;
