@@ -6,6 +6,7 @@ import authConfig from '../config/auth.config.js';
 import UserService from '../services/user.service.js';
 import RoleService from '../services/role.service.js';
 import AuthUtils from '../utils/auth.utils.js';
+import jwt from 'jsonwebtoken';
 
 /**
  * Handle user registration
@@ -46,10 +47,20 @@ export const register = async (req, res) => {
             [defaultRole._id]
         );
 
-        // Send success response
+
+        // Generate JWT for the new user
+        const secret = process.env.JWT_SECRET || 'default-jwt-secret-key';
+        const token = jwt.sign(
+            { id: newUser._id, email: newUser.email, role: defaultRole.name },
+            secret,
+            { expiresIn: '7d' }
+        );
+
+        // Send success response with token
         res.status(201).json({
             message: "User created successfully",
-            user: AuthUtils.formatUserResponse(newUser)
+            user: AuthUtils.formatUserResponse(newUser),
+            token
         });
 
     } catch (err) {
