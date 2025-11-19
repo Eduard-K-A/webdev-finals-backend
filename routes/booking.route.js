@@ -25,8 +25,8 @@ router.get('/bookings/all', getAllBookings);
 router.patch('/bookings/:id/cancel', authenticate, cancelBooking); 
 // User cancels their booking
 
-// /api/bookings/:id
-router.patch('/bookings/:id', authenticate, updateBooking);// Update a booking by ID
+// /api/bookings/:id.edit
+router.patch('/bookings/:id/edit', authenticate, updateBooking);// Update a booking by ID
 
 
 export default router;
