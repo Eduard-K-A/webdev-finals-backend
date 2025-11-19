@@ -65,10 +65,17 @@ export const getRoomById = async (req, res) => {
   try {
     const { id } = req.params;
     
-    // Try to find by custom id field first (UUID), then fall back to id
+    // Try to find by custom id field first (UUID)
     let room = await Room.findOne({ id });
-    if (!room) {
-      room = await Room.findById(id);
+    
+    // If not found and id looks like a MongoDB ObjectId, try findById
+    if (!room && id.match(/^[0-9a-fA-F]{24}$/)) {
+      try {
+        room = await Room.findById(id);
+      } catch (err) {
+        // If findById fails, just return null
+        room = null;
+      }
     }
     
     if (!room) {
@@ -88,10 +95,10 @@ export const getRoomById = async (req, res) => {
 export const updateRoom = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, type, pricePerNight, maxPeople, amenities, photos, isAvailable } = req.body;
+    const { title, description, type, pricePerNight, maxPeople, amenities, photos, thumbnailPic, isAvailable } = req.body;
 
     // Validate at least one field is provided
-    if (!title && !description && !type && !pricePerNight && !maxPeople && !amenities && !photos && isAvailable === undefined) {
+    if (!title && !description && !type && !pricePerNight && !maxPeople && !amenities && !photos && !thumbnailPic && isAvailable === undefined) {
       return res.status(400).json({ message: 'No fields to update' });
     }
 
@@ -106,10 +113,17 @@ export const updateRoom = async (req, res) => {
     if (thumbnailPic) updateData.thumbnailPic = thumbnailPic;
     if (isAvailable !== undefined) updateData.isAvailable = isAvailable;
 
-    // Try to update by custom id field first (UUID), then fall back to id
+    // Try to update by custom id field first (UUID), then fall back to MongoDB _id
     let room = await Room.findOneAndUpdate({ id }, updateData, { new: true });
-    if (!room) {
-      room = await Room.findByIdAndUpdate(id, updateData, { new: true });
+    
+    // If not found and id looks like a MongoDB ObjectId, try findByIdAndUpdate
+    if (!room && id.match(/^[0-9a-fA-F]{24}$/)) {
+      try {
+        room = await Room.findByIdAndUpdate(id, updateData, { new: true });
+      } catch (err) {
+        // If findByIdAndUpdate fails, just return null
+        room = null;
+      }
     }
 
     if (!room) {
