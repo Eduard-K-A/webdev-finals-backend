@@ -87,6 +87,3 @@ app.get('/test-db', async (req, res) => {
 
 
 
-// (server is started after successful DB connection)
-
-
