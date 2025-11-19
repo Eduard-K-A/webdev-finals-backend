@@ -110,7 +110,7 @@ export const getRoomById = async (req, res) => {
 };
 
 /**
- * Update a room by id (UUID or MongoDB id)
+ * Update a room by MongoDB ObjectId
  */
 export const updateRoom = async (req, res) => {
   try {
@@ -133,18 +133,8 @@ export const updateRoom = async (req, res) => {
     if (thumbnailPic) updateData.thumbnailPic = thumbnailPic;
     if (isAvailable !== undefined) updateData.isAvailable = isAvailable;
 
-    // Try to update by custom id field first (UUID), then fall back to MongoDB _id
-    let room = await Room.findOneAndUpdate({ id }, updateData, { new: true });
-    
-    // If not found and id looks like a MongoDB ObjectId, try findByIdAndUpdate
-    if (!room && id.match(/^[0-9a-fA-F]{24}$/)) {
-      try {
-        room = await Room.findByIdAndUpdate(id, updateData, { new: true });
-      } catch (err) {
-        // If findByIdAndUpdate fails, just return null
-        room = null;
-      }
-    }
+    // Update by MongoDB ObjectId
+    const room = await Room.findByIdAndUpdate(id, updateData, { new: true });
 
     if (!room) {
       return res.status(404).json({ message: 'Room not found' });
@@ -158,18 +148,19 @@ export const updateRoom = async (req, res) => {
 };
 
 /**
- * Delete a room by id (UUID or MongoDB id)
+ * Delete a room by MongoDB ObjectId
  */
 export const deleteRoom = async (req, res) => {
   try {
     const { id } = req.params;
-    let room = await Room.findOneAndDelete({ id });
-    if (!room && id.match(/^[0-9a-fA-F]{24}$/)) {
-      room = await Room.findByIdAndDelete(id);
-    }
+
+    // Delete by MongoDB ObjectId
+    const room = await Room.findByIdAndDelete(id);
+
     if (!room) {
       return res.status(404).json({ message: 'Room not found' });
     }
+
     return res.status(200).json({ message: 'Room deleted', room });
   } catch (err) {
     console.error('deleteRoom error:', err);
