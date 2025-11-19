@@ -19,7 +19,7 @@ router.post('/bookings/room/:roomId', authenticate, validateBooking, (req, res, 
 router.get('/bookings', authenticate, getUserBookings); // User gets their bookings
 
 // /api/bookings/all
-router.get('/bookings/all', authenticate, getAllBookings); // Add admin check if needed
+router.get('/bookings/all', getAllBookings); 
 
 // /api/bookings/:id/cancel
 router.patch('/bookings/:id/cancel', authenticate, cancelBooking); 
