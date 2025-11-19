@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
+import { v4 as uuidv4 } from 'uuid';
 
 // Room schema for storing room data
 const roomSchema = new mongoose.Schema(
   {
-    id: { type: String, unique: true, sparse: true },
+    id: { type: String, unique: true, sparse: true, default: () => uuidv4() },
     title: { type: String, required: true },
     description: { type: String, required: true },
     type: { type: String, enum: ["Single", "Double", "Suite", "Family", "Exclusive"], required: true },
@@ -33,6 +34,13 @@ const roomSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Pre-save hook to ensure id is always generated if missing
+roomSchema.pre('save', function(next) {
+  if (!this.id) {
+    this.id = uuidv4();
+  }
+  next();
+});
+
 const Room = mongoose.model("Room", roomSchema);
 export default Room;
-      
