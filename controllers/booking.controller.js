@@ -70,6 +70,7 @@ export const cancelBooking = async (req, res) => {
       { new: true }
     ).populate('room');
     if (!booking) return res.status(404).json({ error: 'Booking not found or unauthorized' });
+    // No need to update Room.isAvailable globally; freeing up the dates is handled by not blocking them in future booking checks
     res.json(booking);
   } catch (err) {
     res.status(500).json({ error: err.message });
