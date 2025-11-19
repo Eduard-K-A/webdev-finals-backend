@@ -3,6 +3,7 @@
  */
 import express from 'express';
 import { createRoom, getRooms, getRoomById, updateRoom } from '../controllers/room.controller.js';
+import { deleteRoom } from '../controllers/room.controller.js';
 import { deleteImage } from '../controllers/deleteRoom.controller.js';
 import { handleUpload } from '../controllers/uploadRoom.controller.js';
 import upload from '../middleware/upload.validator.js';
@@ -20,6 +21,9 @@ router.get('/rooms/:id', getRoomById);
 
 // PUT /api/rooms/:id - update room by ID (uuid or _id)
 router.put('/rooms/:id', updateRoom);
+
+// DELETE /api/rooms/:id - delete room by MongoDB ObjectId
+router.delete('/rooms/:id', deleteRoom);
 
 // DELETE /api/upload/:publicId - delete image by public ID 
 router.delete('/upload/:publicId',deleteImage);
