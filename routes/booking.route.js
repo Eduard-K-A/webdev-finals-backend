@@ -22,11 +22,11 @@ router.get('/bookings', authenticate, getUserBookings); // User gets their booki
 router.get('/bookings/all', getAllBookings); 
 
 // /api/bookings/:id/cancel
-router.patch('/bookings/:id/cancel', authenticate, cancelBooking); 
+router.put('/bookings/:id/cancel', authenticate, cancelBooking); 
 // User cancels their booking
 
 // /api/bookings/:id.edit
-router.patch('/bookings/:id/edit', authenticate, updateBooking);// Update a booking by ID
+router.put('/bookings/:id/edit', authenticate, updateBooking);// Update a booking by ID
 
 
 export default router;
