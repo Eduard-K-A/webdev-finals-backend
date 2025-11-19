@@ -64,12 +64,31 @@ export const getAllBookings = async (req, res) => {
 // Cancel a booking
 export const cancelBooking = async (req, res) => {
   try {
+    const booking = await Booking.findOneAndUpdate(
+      { _id: req.params.id, user: req.user._id },
+      { status: 'Cancelled' },
+      { new: true }
+    ).populate('room');
+    if (!booking) return res.status(404).json({ error: 'Booking not found or unauthorized' });
+    res.json(booking);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Update a booking
+export const updateBooking = async (req, res) => {
+  try {
     const booking = await Booking.findById(req.params.id);
     if (!booking) return res.status(404).json({ error: 'Booking not found' });
     if (booking.user.toString() !== req.user._id.toString()) {
       return res.status(403).json({ error: 'Unauthorized' });
     }
-    booking.status = 'Cancelled';
+    // Only allow updating certain fields
+    const allowed = ['checkInDate', 'checkOutDate', 'totalGuests', 'totalPrice', 'status'];
+    allowed.forEach(field => {
+      if (req.body[field] !== undefined) booking[field] = req.body[field];
+    });
     await booking.save();
     res.json(booking);
   } catch (err) {
