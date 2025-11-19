@@ -1,4 +1,5 @@
 import User from '../models/User.js';
+import Role from '../models/Role.js';
 import bcrypt from "bcryptjs";
 
 /**
@@ -62,33 +63,29 @@ export const getUserById = async (req, res) => {
 export const createUser = async (req, res) => {
   try {
     const { firstName, lastName, email, password, role } = req.body;
-
-    // Validate required fields
     if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ message: "All fields are required." });
     }
-
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists." });
     }
-
-    // Hash the password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Create the user
+    // Find the correct role document
+    const roleName = role === 'admin' ? 'admin' : 'user';
+    const roleDoc = await Role.findOne({ name: roleName });
+    if (!roleDoc) {
+      return res.status(500).json({ message: `Role '${roleName}' not found in database.` });
+    }
     const newUser = new User({
       firstName,
       lastName,
       email,
       password: hashedPassword,
-      role: role || "user", // Default role is 'user'
+      roles: [roleDoc._id],
     });
-
     await newUser.save();
-
     res.status(201).json({ message: "User created successfully.", user: newUser });
   } catch (error) {
     console.error("Error creating user:", error);
