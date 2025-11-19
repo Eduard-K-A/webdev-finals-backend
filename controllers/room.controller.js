@@ -156,3 +156,23 @@ export const updateRoom = async (req, res) => {
     return res.status(500).json({ message: err.message || 'Server error' });
   }
 };
+
+/**
+ * Delete a room by id (UUID or MongoDB id)
+ */
+export const deleteRoom = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let room = await Room.findOneAndDelete({ id });
+    if (!room && id.match(/^[0-9a-fA-F]{24}$/)) {
+      room = await Room.findByIdAndDelete(id);
+    }
+    if (!room) {
+      return res.status(404).json({ message: 'Room not found' });
+    }
+    return res.status(200).json({ message: 'Room deleted', room });
+  } catch (err) {
+    console.error('deleteRoom error:', err);
+    return res.status(500).json({ message: err.message || 'Server error' });
+  }
+};
