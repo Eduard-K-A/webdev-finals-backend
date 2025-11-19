@@ -1,4 +1,5 @@
 import User from '../models/User.js';
+import bcrypt from "bcryptjs";
 
 /**
  * Get all users (excluding password) and populate their roles
@@ -54,5 +55,43 @@ export const getUserById = async (req, res) => {
   } catch (err) {
     console.error('getUserById error:', err);
     return res.status(500).json({ message: err.message || 'Server error' });
+  }
+};
+
+// Create a new user
+export const createUser = async (req, res) => {
+  try {
+    const { firstName, lastName, email, password, role } = req.body;
+
+    // Validate required fields
+    if (!firstName || !lastName || !email || !password) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists." });
+    }
+
+    // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create the user
+    const newUser = new User({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+      role: role || "user", // Default role is 'user'
+    });
+
+    await newUser.save();
+
+    res.status(201).json({ message: "User created successfully.", user: newUser });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ message: "Internal server error." });
   }
 };
