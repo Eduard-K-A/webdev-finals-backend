@@ -1,6 +1,7 @@
 import User from '../models/User.js';
 import Role from '../models/Role.js';
 import bcrypt from "bcryptjs";
+import Booking from '../models/Booking.js';
 
 /**
  * Get all users (excluding password) and populate their roles
@@ -102,5 +103,18 @@ export const deleteUser = async (req, res) => {
   } catch (err) {
     console.error('deleteUser error:', err);
     return res.status(500).json({ message: err.message || 'Server error' });
+  }
+};
+
+export const updateBooking = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const update = req.body;
+    const booking = await Booking.findByIdAndUpdate(id, update, { new: true });
+    if (!booking) return res.status(404).json({ message: 'Booking not found' });
+    res.status(200).json({ message: 'Booking updated', booking });
+  } catch (err) {
+    console.error('updateBooking error:', err);
+    res.status(500).json({ message: err.message || 'Server error' });
   }
 };
