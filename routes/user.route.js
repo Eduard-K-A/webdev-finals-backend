@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllUsers, getUserById, deleteUser } from "../controllers/user.controller.js";
+import { getAllUsers, getUserById,  } from "../controllers/user.controller.js";
 
 const router = express.Router();
 
@@ -10,6 +10,6 @@ router.get('/users', getAllUsers);
 router.get('/users/:id', getUserById);
 
 // DELETE /api/users/:id - delete a user
-router.delete('/users/:id', deleteUser);
+router.delete('/users/:id', getUserById);
 
 export default router;
